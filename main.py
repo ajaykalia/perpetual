@@ -1,5 +1,12 @@
 import os
 import openai
+from datetime import timezone
+import datetime
+dt = datetime.datetime.now(timezone.utc)
+utc_time = dt.replace(tzinfo=timezone.utc)
+utc_timestamp = utc_time.timestamp()
+  
+print(utc_timestamp)
 open_ai_key = os.environ['OPEN_AI_KEY']
 openai.api_key = open_ai_key
 from agent_prompts import prompts
@@ -100,11 +107,24 @@ llm1_start = "Just finished acquisition talks for a sick new digital media start
 history_objects['llm1'].add_ai_message(llm1_start)
 memory_objects['llm1'].chat_memory.add_ai_message(llm1_start)
 
-for i in range(1,2):
-    print("============ITERATION ",i)
-    run_llm1("Interesting. Tell me about your dad.")
 
+now = datetime.datetime.now()
+date_string = now.strftime("%Y%m%d%H%M%S")
+directory = "chats"
+os.makedirs(directory, exist_ok=True)
 
+# Create the file name with the generated string
+file_name = os.path.join(directory, f"chat-{date_string}.txt")
+for i in range(1,20):
+    with open(file_name, "a") as f:
+        output = "====================\n ITERATION " + str(i) + "\n====================\n"
+        f.write(output)
+        print(output)
+        run_llm1("Interesting. Tell me more.")
+        last_llm1 = "LLM 1 (Kendall Roy): " + history_objects['llm1'].messages[-1].content + "\n"
+        last_llm2 = "LLM 2: " + history_objects['llm1'].messages[-2].content + "\n"
+        f.write(last_llm1)
+        f.write(last_llm2)
   
 
       
