@@ -104,6 +104,7 @@ def run_llm1(input_text):
 #==========================================
 llm1_start = "Just finished acquisition talks for a sick new digital media startup. Really transforming the potential for hyperconnected virtual experiences. We're probably overpaying, but what the hell, gotta ride the lightning."
 
+history_objects['llm1'].add_user_message("Interesting. Tell me more.")
 history_objects['llm1'].add_ai_message(llm1_start)
 memory_objects['llm1'].chat_memory.add_ai_message(llm1_start)
 
@@ -120,11 +121,12 @@ for i in range(1,20):
         output = "====================\n ITERATION " + str(i) + "\n====================\n"
         f.write(output)
         print(output)
-        run_llm1("Interesting. Tell me more.")
         last_llm1 = "LLM 1 (Kendall Roy): " + history_objects['llm1'].messages[-1].content + "\n"
         last_llm2 = "LLM 2: " + history_objects['llm1'].messages[-2].content + "\n"
         f.write(last_llm1)
         f.write(last_llm2)
+        run_llm1("Interesting. Tell me more.")
+
   
 
       
