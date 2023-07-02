@@ -1,2 +1,2 @@
-# perpetual
-An AI agent for teaching AI agents to talk to AI agents
+# Perpetual
+Perpetual is AI agent for teaching AI agents how to talk to AI agents.
