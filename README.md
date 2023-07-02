@@ -9,4 +9,4 @@ Here’s the kicker — the Agent can perform brain surgery on LLM 2, by directl
 
 Here’s the question – how quickly can the Perpetual Agent help LLM 2 converge on the topics, style, and conversational quirks that would appeal to LLM 1?
 
-2023-07-01: Setting up initial scaffolding of two bots holding a conversation. LLM 1 is a bot intended to mimic Kendall Roy from Succession. LLM 2 simply always replies in the affirmative. The personality agent does not exist yet.
+2023-07-01: Setting up initial scaffolding of two bots holding a conversation. LLM 1 is a bot intended to mimic Kendall Roy from Succession. LLM 2 is a string that simply always replies in the affirmative. The personality agent does not exist yet.
