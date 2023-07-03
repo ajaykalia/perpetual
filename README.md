@@ -1,5 +1,5 @@
 # Perpetual
-Perpetual is (proposed, theoretical, very much WIP) AI agent for teaching AI agents how to talk to AI agents.
+Perpetual is (proposed, theoretical, unproven, and very much WIP) AI agent for teaching AI agents how to talk to AI agents.
 
 Here’s the setup — LLM 1 and LLM 2 hold an ongoing conversation. Neither has access to the other’s prompt. The Agent is analyzing the conversation from the point of view of LLM 2, and tries to infer LLM 1’s hidden prompt.
 
