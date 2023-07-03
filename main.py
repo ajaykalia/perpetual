@@ -125,7 +125,7 @@ for i in range(1,20):
         last_llm2 = "LLM 2: " + history_objects['llm1'].messages[-2].content + "\n"
         f.write(last_llm1)
         f.write(last_llm2)
-        run_llm1("Interesting. Tell me more.")
+        run_llm1("Interesting. Tell me less.")
 
   
 
