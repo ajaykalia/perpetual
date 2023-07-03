@@ -104,7 +104,7 @@ def run_llm1(input_text):
 #==========================================
 llm1_start = "Just finished acquisition talks for a sick new digital media startup. Really transforming the potential for hyperconnected virtual experiences. We're probably overpaying, but what the hell, gotta ride the lightning."
 
-history_objects['llm1'].add_user_message("Interesting. Tell me more.")
+history_objects['llm1'].add_user_message("Interesting. Tell me less.")
 history_objects['llm1'].add_ai_message(llm1_start)
 memory_objects['llm1'].chat_memory.add_ai_message(llm1_start)
 
