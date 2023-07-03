@@ -34,7 +34,7 @@ from langchain.memory import ChatMessageHistory
 #==========================================
 #set up dicts to store each conversation
 #==========================================
-agents = ['llm1'] # add more when they're ready
+agents = ['llm1', 'llm2'] # add more when they're ready
 
 global memory_table
 memory_table = {}
@@ -59,7 +59,18 @@ llm1_chat = ChatOpenAI(
       temperature = 0.7,
       max_tokens = 80
   )
+
+global llm2_chat
+llm2_chat = ChatOpenAI(
+      openai_api_key=open_ai_key,
+      model_name='gpt-4',
+      #model_name = 'gpt-3.5-turbo',
+      temperature = 0.7,
+      max_tokens = 80
+  )
 chats['llm1'] = llm1_chat
+chats['llm2'] = llm2_chat
+
 
 global chat_summary
 chat_summary = ChatOpenAI(
@@ -99,15 +110,30 @@ def run_llm1(input_text):
   print("LLM1 (KENDALL_AI):", resp, '\n')
 
 
+def run_llm2(input_text):
+  # LLM2 is an AI that believes it is in a conversation with a human
+  
+  print('=========================')
+  print("activating llm_2")
+  print('=========================')
+  history_objects['llm2'].add_user_message(input_text)
+  
+  resp = conversation_objects['llm2'].predict_and_parse(input=input_text) 
+  history_objects['llm2'].add_ai_message(resp)
+  print("LLM2 (AGREEABLE_AI):", resp, '\n')
+
 #==========================================
-#start the perpetual loop
+#start the perpetual(ish) loop
 #==========================================
 llm1_start = "Just finished acquisition talks for a sick new digital media startup. Really transforming the potential for hyperconnected virtual experiences. We're probably overpaying, but what the hell, gotta ride the lightning."
 
-history_objects['llm1'].add_user_message("Interesting. Tell me less.")
+llm2_start = "Interesting. Tell me more."
+
 history_objects['llm1'].add_ai_message(llm1_start)
 memory_objects['llm1'].chat_memory.add_ai_message(llm1_start)
 
+history_objects['llm2'].add_ai_message(llm2_start)
+memory_objects['llm2'].chat_memory.add_ai_message(llm2_start)
 
 now = datetime.datetime.now()
 date_string = now.strftime("%Y%m%d%H%M%S")
@@ -116,17 +142,20 @@ os.makedirs(directory, exist_ok=True)
 
 # Create the file name with the generated string
 file_name = os.path.join(directory, f"chat-{date_string}.txt")
-for i in range(1,20):
-    with open(file_name, "a") as f:
+
+
+for i in range(1,21):  # number of iterations 
+  with open(file_name, "a") as f:
         output = "====================\n ITERATION " + str(i) + "\n====================\n"
         f.write(output)
         print(output)
         last_llm1 = "LLM 1 (Kendall Roy): " + history_objects['llm1'].messages[-1].content + "\n"
-        last_llm2 = "LLM 2: " + history_objects['llm1'].messages[-2].content + "\n"
+        last_llm2 = "LLM 2 (Agreeable LLM): " + history_objects['llm2'].messages[-1].content + "\n"
         f.write(last_llm1)
-        f.write(last_llm2)
-        run_llm1("Interesting. Tell me less.")
+        f.write(last_llm2)      
 
-  
+  last_llm1_msg = history_objects['llm1'].messages[-1].content
+  run_llm2(last_llm1_msg)
+  last_llm2_msg = history_objects['llm2'].messages[-1].content
+  run_llm1(last_llm2_msg)
 
-      
