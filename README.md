@@ -10,15 +10,20 @@ Here’s the kicker — the Agent can perform brain surgery on LLM 2, by directl
 Here’s the question – how quickly can the Perpetual Agent help LLM 2 converge on the topics, style, and conversational quirks that would appeal to LLM 1?
 
 ===========
+Update 4: The full loop is in place! LLM 1 talks, the Agent analyzes the ongoing conversation, and that analysis is dropped into the new LLM 2 prompt.
+Example output here: https://raw.githubusercontent.com/ajaykalia/perpetual/main/chats/chat-20230704012646.txt
+- For the first time, LLM 2 adjusts in response to the Agent's analysis -- see iterations 3,4,5 where LLM 2 modulated its critique based to the Agent's suggestions.
 
 Update 3: Added LLM 2 and simple version of Agent. Agent analyzes the conversation, but does not modify LLM 2 yet.
-
 Example output here: https://raw.githubusercontent.com/ajaykalia/perpetual/main/chats/chat-20230704012646.txt
+- The dialogue is going on, and the the Agent is present and analyzing, but LLM 2 does not actually change anything in response based on that analysis.
+
 
 Update 2: Added a basic "LLM2" (actually just a fixed string) that always agrees and asks for more info. Still no Perpetual Agent yet.
-
 Example output here: https://raw.githubusercontent.com/ajaykalia/perpetual/main/chats/chat-20230703173559.txt
+- LLM 1 is talking, and LLM 2 is now a real (if boring and agreeable) LLM.
 
-Update 1: Setting up initial scaffolding of two bots holding a conversation. LLM 1 is a bot intended to mimic Kendall Roy from Succession. LLM 2 is a string that simply always replies in the affirmative. The personality agent does not exist yet.
 
+Update 1: Setting up initial scaffolding of two bots holding a conversation. LLM 1 is a bot intended to mimic Kendall Roy from Succession. LLM 2 and The personality agent do not exist yet.
 Example output here: https://raw.githubusercontent.com/ajaykalia/perpetual/main/chats/chat-20230702044204.txt
+- LLM 1 is talking, and LLM 2 is responding with the same thing every time without any real dialogue.
