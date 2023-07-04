@@ -11,14 +11,6 @@ Here’s the question – how quickly can the Perpetual Agent help LLM 2 converg
 
 ===========
 
-2023-07-03: Added LLM 2 and simple version of Agent. Agent analyzes the conversation, but does not modify LLM 2 yet.
+2023-07-03: LLM 1 is still Kendall Roy. Added an agreeable LLM 2 and simple version of Agent. Agent analyzes the conversation, but does not modify LLM 2 yet.
 
 Example output here: https://raw.githubusercontent.com/ajaykalia/perpetual/main/chats/chat-20230704012646.txt
-
-2023-07-02: Added a basic "LLM2" (actually just a fixed string) that always agrees and asks for more info. Still no Perpetual Agent yet.
-
-Example output here: https://raw.githubusercontent.com/ajaykalia/perpetual/main/chats/chat-20230703173559.txt
-
-2023-07-01: Setting up initial scaffolding of two bots holding a conversation. LLM 1 is a bot intended to mimic Kendall Roy from Succession. LLM 2 is a string that simply always replies in the affirmative. The personality agent does not exist yet.
-
-Example output here: https://raw.githubusercontent.com/ajaykalia/perpetual/main/chats/chat-20230702044204.txt
