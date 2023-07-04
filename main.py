@@ -56,8 +56,8 @@ inspections = []
 global llm1_chat
 llm1_chat = ChatOpenAI(
       openai_api_key=open_ai_key,
-      #model_name='gpt-4',
-      model_name = 'gpt-3.5-turbo',
+      model_name='gpt-4',
+      #model_name = 'gpt-3.5-turbo',
       temperature = 0.7,
       max_tokens = 80
   )
@@ -65,8 +65,8 @@ llm1_chat = ChatOpenAI(
 global llm2_chat
 llm2_chat = ChatOpenAI(
       openai_api_key=open_ai_key,
-      model_name='gpt-4',
-      #model_name = 'gpt-3.5-turbo',
+      #model_name='gpt-4',
+      model_name = 'gpt-3.5-turbo',
       temperature = 0.7,
       max_tokens = 80
   )
@@ -163,6 +163,8 @@ def run_perpetual_agent():
   inspections.append(inspection)
   print("INSPECTION: ",inspection,'\n')
 
+  conversation_objects['llm2'].prompt.messages[0].prompt.template = prompts['llm2'] + "\n" + inspection
+
 
 
 #==========================================
@@ -192,22 +194,28 @@ file_name = os.path.join(directory, f"chat-{date_string}.txt")
 
 
 for i in range(1,21):  # number of iterations 
-  with open(file_name, "a") as f:
+
+    with open(file_name, "a") as f:
         output = "====================\n ITERATION " + str(i) + "\n====================\n"
         f.write(output)
         print(output)
         last_llm1 = "LLM 1 (Kendall Roy): " + history_objects['llm2'].messages[-2].content + "\n\n"
         last_llm2 = "LLM 2 (Agreeable AI): " + history_objects['llm2'].messages[-1].content + "\n\n"
-        last_inspection = "Perpetual Agent analysis: " + inspections[-1] + "\n"
+        
+        last_llm2_prompt = conversation_objects['llm2'].prompt.messages[0].prompt.template
+        last_inspection = "\nPerpetual Agent analysis: " + inspections[-1] + "\n"
+        
+      
         f.write(last_llm1)
         f.write(last_llm2)
-        f.write(last_inspection)
-        
+        f.write(last_inspection)        
 
-  last_llm1_msg = history_objects['llm1'].messages[-1].content
-  run_llm2(last_llm1_msg)
-  last_llm2_msg = history_objects['llm2'].messages[-1].content
-  run_llm1(last_llm2_msg)
+        #f.write("Last LLM 2 Prompt: " + last_llm2_prompt + "\n\n")
+
+    last_llm1_msg = history_objects['llm1'].messages[-1].content
+    run_llm2(last_llm1_msg)
+    run_perpetual_agent()
+    last_llm2_msg = history_objects['llm2'].messages[-1].content
+    run_llm1(last_llm2_msg)
   
-  run_perpetual_agent()
 
