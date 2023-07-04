@@ -54,8 +54,8 @@ chats = {}
 global llm1_chat
 llm1_chat = ChatOpenAI(
       openai_api_key=open_ai_key,
-      model_name='gpt-4',
-      #model_name = 'gpt-3.5-turbo',
+      #model_name='gpt-4',
+      model_name = 'gpt-3.5-turbo',
       temperature = 0.7,
       max_tokens = 80
   )
@@ -63,8 +63,8 @@ llm1_chat = ChatOpenAI(
 global llm2_chat
 llm2_chat = ChatOpenAI(
       openai_api_key=open_ai_key,
-      model_name='gpt-4',
-      #model_name = 'gpt-3.5-turbo',
+      #model_name='gpt-4',
+      model_name = 'gpt-3.5-turbo',
       temperature = 0.7,
       max_tokens = 80
   )
