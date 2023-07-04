@@ -56,8 +56,8 @@ inspections = []
 global llm1_chat
 llm1_chat = ChatOpenAI(
       openai_api_key=open_ai_key,
-      model_name='gpt-4',
-      #model_name = 'gpt-3.5-turbo',
+      #model_name='gpt-4',
+      model_name = 'gpt-3.5-turbo',
       temperature = 0.7,
       max_tokens = 80
   )
@@ -74,9 +74,9 @@ llm2_chat = ChatOpenAI(
 global perpetual_agent
 perpetual_agent_chat = ChatOpenAI(
       openai_api_key=open_ai_key,
-      model_name='gpt-4',
-      #model_name = 'gpt-3.5-turbo',
-      temperature = 0.7,
+      #model_name='gpt-4',
+      model_name = 'gpt-3.5-turbo',
+      temperature = 0.2,
       max_tokens = 80
   )
 
@@ -175,7 +175,9 @@ llm2_start = "Interesting. Tell me more."
 history_objects['llm1'].add_ai_message(llm1_start)
 memory_objects['llm1'].chat_memory.add_ai_message(llm1_start)
 
+history_objects['llm2'].add_user_message(llm1_start)
 history_objects['llm2'].add_ai_message(llm2_start)
+memory_objects['llm2'].chat_memory.add_user_message(llm1_start)
 memory_objects['llm2'].chat_memory.add_ai_message(llm2_start)
 
 inspections.append("[First interaction]")
@@ -194,7 +196,7 @@ for i in range(1,21):  # number of iterations
         output = "====================\n ITERATION " + str(i) + "\n====================\n"
         f.write(output)
         print(output)
-        last_llm1 = "LLM 1 (Kendall Roy): " + history_objects['llm1'].messages[-1].content + "\n\n"
+        last_llm1 = "LLM 1 (Kendall Roy): " + history_objects['llm2'].messages[-2].content + "\n\n"
         last_llm2 = "LLM 2 (Agreeable AI): " + history_objects['llm2'].messages[-1].content + "\n\n"
         last_inspection = "Perpetual Agent analysis: " + inspections[-1] + "\n"
         f.write(last_llm1)
