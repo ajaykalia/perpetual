@@ -12,7 +12,7 @@ Here’s the question – how quickly can the Perpetual Agent help LLM 2 converg
 ===========
 
 Update 4: The full loop is in place! LLM 1 talks, the Agent analyzes the ongoing conversation, and that analysis is dropped into the new LLM 2 prompt, influencing LLM 2's reponse.
-- Example output here: https://raw.githubusercontent.com/ajaykalia/perpetual/main/chats/chat-20230704012646.txt
+- Example output here: https://raw.githubusercontent.com/ajaykalia/perpetual/main/chats/chat-20230704183647.txt
 - For the first time, LLM 2 adjusts in response to the Agent's analysis -- see iterations 3,4,5 where LLM 2 modulated its critique based to the Agent's suggestions.
 
 Update 3: Added LLM 2 and simple version of Agent. Agent analyzes the conversation, but does not modify LLM 2 yet.
