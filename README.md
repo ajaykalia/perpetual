@@ -3,7 +3,7 @@ Perpetual is (proposed, theoretical, unproven, and very much WIP) AI agent for t
 
 Here’s the setup — LLM 1 and LLM 2 hold an ongoing conversation. Neither has access to the other’s prompt. The Agent is analyzing the conversation from the point of view of LLM 2, and tries to infer LLM 1’s hidden prompt.
 
-<img width="404" alt="image" src="https://github.com/ajaykalia/perpetual/assets/614656/ea535412-4692-4164-8df3-be50097a745f">
+<img width="479" alt="perpetual_tweet" src="https://github.com/ajaykalia/perpetual/assets/614656/efb1a5e3-58b6-4f3f-877c-052c6db2b657">
 
 Here’s the kicker — the Agent can perform brain surgery on LLM 2, by directly modifying LLM 2’s prompt to continuously improve the conversation. No intervention from a human required. It's a perpetual personalization machine!
 
