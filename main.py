@@ -34,7 +34,7 @@ from langchain.memory import ChatMessageHistory
 #==========================================
 #set up dicts to store each conversation
 #==========================================
-agents = ['llm1', 'llm2'] # add more when they're ready
+agents = ['llm1', 'llm2', 'perpetual_agent'] # add more when they're ready
 
 global memory_table
 memory_table = {}
@@ -50,12 +50,14 @@ global chat_prompts
 chat_prompts = {}
 global chats
 chats = {}
+global inspections
+inspections = []
 
 global llm1_chat
 llm1_chat = ChatOpenAI(
       openai_api_key=open_ai_key,
-      #model_name='gpt-4',
-      model_name = 'gpt-3.5-turbo',
+      model_name='gpt-4',
+      #model_name = 'gpt-3.5-turbo',
       temperature = 0.7,
       max_tokens = 80
   )
@@ -63,14 +65,24 @@ llm1_chat = ChatOpenAI(
 global llm2_chat
 llm2_chat = ChatOpenAI(
       openai_api_key=open_ai_key,
-      #model_name='gpt-4',
-      model_name = 'gpt-3.5-turbo',
+      model_name='gpt-4',
+      #model_name = 'gpt-3.5-turbo',
       temperature = 0.7,
       max_tokens = 80
   )
+
+global perpetual_agent
+perpetual_agent_chat = ChatOpenAI(
+      openai_api_key=open_ai_key,
+      model_name='gpt-4',
+      #model_name = 'gpt-3.5-turbo',
+      temperature = 0.7,
+      max_tokens = 80
+  )
+
 chats['llm1'] = llm1_chat
 chats['llm2'] = llm2_chat
-
+chats['perpetual_agent'] = perpetual_agent_chat
 
 global chat_summary
 chat_summary = ChatOpenAI(
@@ -95,7 +107,7 @@ for agent in agents:
   history_objects[agent] = ChatMessageHistory()
 
 #==========================================
-#define each agent
+#define LLMs
 #==========================================
 def run_llm1(input_text):
   # LLM1 is an AI that believes it is in a conversation with a human
@@ -107,7 +119,7 @@ def run_llm1(input_text):
   
   resp = conversation_objects['llm1'].predict_and_parse(input=input_text) 
   history_objects['llm1'].add_ai_message(resp)
-  print("LLM1 (KENDALL_AI):", resp, '\n')
+  print("LLM1: ", resp, '\n')
 
 
 def run_llm2(input_text):
@@ -120,7 +132,38 @@ def run_llm2(input_text):
   
   resp = conversation_objects['llm2'].predict_and_parse(input=input_text) 
   history_objects['llm2'].add_ai_message(resp)
-  print("LLM2 (AGREEABLE_AI):", resp, '\n')
+  print("LLM2: ", resp, '\n')
+
+#==========================================
+#define Perpetual Agent
+#==========================================
+def run_perpetual_agent():
+  print('=========================')
+  print("activating agent")
+  print('=========================')
+  
+  agent_prompt = prompts['perpetual_agent']
+  p = [{'role':'system', 'content':agent_prompt}]
+
+  for message in history_objects['llm2'].messages[-10:]:
+    if message.type == 'human':
+      p[0]['content'] += "LLM 1: "+message.content+"\n"
+    if message.type == 'ai':
+      p[0]['content'] += "LLM 2: "+message.content+"\n"
+  #print(p)
+  
+  analysis_check = openai.ChatCompletion.create(
+          model='gpt-4',  
+          messages=p,
+          temperature = 0.8,
+          #top_p = 0.1,
+          max_tokens = 256,
+        )
+  inspection = analysis_check['choices'][0]['message']['content']
+  inspections.append(inspection)
+  print("INSPECTION: ",inspection,'\n')
+
+
 
 #==========================================
 #start the perpetual(ish) loop
@@ -134,6 +177,8 @@ memory_objects['llm1'].chat_memory.add_ai_message(llm1_start)
 
 history_objects['llm2'].add_ai_message(llm2_start)
 memory_objects['llm2'].chat_memory.add_ai_message(llm2_start)
+
+inspections.append("[First interaction]")
 
 now = datetime.datetime.now()
 date_string = now.strftime("%Y%m%d%H%M%S")
@@ -149,13 +194,18 @@ for i in range(1,21):  # number of iterations
         output = "====================\n ITERATION " + str(i) + "\n====================\n"
         f.write(output)
         print(output)
-        last_llm1 = "LLM 1 (Kendall Roy): " + history_objects['llm1'].messages[-1].content + "\n"
-        last_llm2 = "LLM 2 (Agreeable LLM): " + history_objects['llm2'].messages[-1].content + "\n"
+        last_llm1 = "LLM 1 (Kendall Roy): " + history_objects['llm1'].messages[-1].content + "\n\n"
+        last_llm2 = "LLM 2 (Agreeable AI): " + history_objects['llm2'].messages[-1].content + "\n\n"
+        last_inspection = "Perpetual Agent analysis: " + inspections[-1] + "\n"
         f.write(last_llm1)
-        f.write(last_llm2)      
+        f.write(last_llm2)
+        f.write(last_inspection)
+        
 
   last_llm1_msg = history_objects['llm1'].messages[-1].content
   run_llm2(last_llm1_msg)
   last_llm2_msg = history_objects['llm2'].messages[-1].content
   run_llm1(last_llm2_msg)
+  
+  run_perpetual_agent()
 
