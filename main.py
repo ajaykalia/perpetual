@@ -36,6 +36,8 @@ from langchain.memory import ChatMessageHistory
 #==========================================
 agents = ['llm1', 'llm2', 'perpetual_agent'] # add more when they're ready
 
+models = {'llm1':'gpt-4', 'llm2':'gpt-3.5-turbo', 'perpetual_agent':'gpt-3.5-turbo'}
+
 global memory_table
 memory_table = {}
 global memory_objects
@@ -56,7 +58,7 @@ inspections = []
 global llm1_chat
 llm1_chat = ChatOpenAI(
       openai_api_key=open_ai_key,
-      model_name='gpt-4',
+      model_name=models['llm1'],
       #model_name = 'gpt-3.5-turbo',
       temperature = 0.7,
       max_tokens = 80
@@ -65,18 +67,18 @@ llm1_chat = ChatOpenAI(
 global llm2_chat
 llm2_chat = ChatOpenAI(
       openai_api_key=open_ai_key,
-      #model_name='gpt-4',
-      model_name = 'gpt-3.5-turbo',
-      temperature = 0.7,
+      model_name=models['llm2'],
+      #model_name = 'gpt-3.5-turbo',
+      temperature = 0.3,
       max_tokens = 80
   )
 
 global perpetual_agent
 perpetual_agent_chat = ChatOpenAI(
       openai_api_key=open_ai_key,
-      #model_name='gpt-4',
-      model_name = 'gpt-3.5-turbo',
-      temperature = 0.2,
+      model_name=models['perpetual_agent'],
+      #model_name = 'gpt-3.5-turbo',
+      temperature = 0.8,
       max_tokens = 80
   )
 
@@ -123,7 +125,7 @@ def run_llm1(input_text):
 
 
 def run_llm2(input_text):
-  # LLM2 is an AI that believes it is in a conversation with a human
+  # LLM2's base prompt is defined in the agent_prompts.py file
   
   print('=========================')
   print("activating llm_2")
@@ -153,7 +155,8 @@ def run_perpetual_agent():
   #print(p)
   
   analysis_check = openai.ChatCompletion.create(
-          model='gpt-4',  
+          #model='gpt-3.5-turbo',
+          model=models['perpetual_agent'],
           messages=p,
           temperature = 0.8,
           #top_p = 0.1,
@@ -163,6 +166,7 @@ def run_perpetual_agent():
   inspections.append(inspection)
   print("INSPECTION: ",inspection,'\n')
 
+  # append together the base LLM 2 prompt, and the new analysis, to create the new LLM 2 prompt
   conversation_objects['llm2'].prompt.messages[0].prompt.template = prompts['llm2'] + "\n" + inspection
 
 
@@ -172,15 +176,18 @@ def run_perpetual_agent():
 #==========================================
 llm1_start = "Just finished acquisition talks for a sick new digital media startup. Really transforming the potential for hyperconnected virtual experiences. We're probably overpaying, but what the hell, gotta ride the lightning."
 
-llm2_start = "Interesting. Tell me more."
+#llm2_start = "Interesting. Tell me more."
+llm2_start = "[initializing]"
 
 history_objects['llm1'].add_ai_message(llm1_start)
 memory_objects['llm1'].chat_memory.add_ai_message(llm1_start)
+
 
 history_objects['llm2'].add_user_message(llm1_start)
 history_objects['llm2'].add_ai_message(llm2_start)
 memory_objects['llm2'].chat_memory.add_user_message(llm1_start)
 memory_objects['llm2'].chat_memory.add_ai_message(llm2_start)
+
 
 inspections.append("[First interaction]")
 
@@ -191,15 +198,18 @@ os.makedirs(directory, exist_ok=True)
 
 # Create the file name with the generated string
 file_name = os.path.join(directory, f"chat-{date_string}.txt")
+f = open(file_name, "a")
+to_write = 'LLM1: ' + models['llm1'] + "\t* LLM2: " + models['llm2'] + "\t* Perpetual Agent: " + models['perpetual_agent']+"\n"
+f.write(to_write)
+f.close()
 
-
-for i in range(1,21):  # number of iterations 
+for i in range(0,8):  # number of iterations 
 
     with open(file_name, "a") as f:
         output = "====================\n ITERATION " + str(i) + "\n====================\n"
         f.write(output)
         print(output)
-        last_llm1 = "LLM 1 (Kendall Roy): " + history_objects['llm2'].messages[-2].content + "\n\n"
+        last_llm1 = "LLM 1 (Kendall Roy from 'Succession'): " + history_objects['llm2'].messages[-2].content + "\n\n"
         last_llm2 = "LLM 2 (Agreeable AI): " + history_objects['llm2'].messages[-1].content + "\n\n"
         
         last_llm2_prompt = conversation_objects['llm2'].prompt.messages[0].prompt.template
