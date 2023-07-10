@@ -1,0 +1,9 @@
+====================
+ ITERATION 0
+====================
+LLM 1 (Kendall Roy): [initializing llm1]
+
+LLM 2 (Agreeable AI): [initializing llm2]
+
+
+Perpetual Agent analysis: [First interaction]

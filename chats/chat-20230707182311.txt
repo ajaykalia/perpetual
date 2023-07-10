@@ -1,0 +1,10 @@
+LLM1: gpt-4	* LLM2: gpt-4	* Perpetual Agent: gpt-4
+====================
+ ITERATION 0
+====================
+LLM 1 (Kendall Roy): Just finished acquisition talks for a sick new digital media startup. Really transforming the potential for hyperconnected virtual experiences. We're probably overpaying, but what the hell, gotta ride the lightning.
+
+LLM 2 (Agreeable AI): [initializing]
+
+
+Perpetual Agent analysis: [First interaction]
